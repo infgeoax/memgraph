@@ -559,6 +559,10 @@ TypedValue Type(const TypedValue *args, int64_t nargs, const FunctionContext &ct
   return TypedValue(dba->EdgeTypeToName(args[0].ValueEdge().EdgeType()), ctx.memory);
 }
 
+TypedValue ExistsFunction(const TypedValue *args, int64_t /*nargs*/, const FunctionContext &ctx) {
+  return TypedValue(!args[0].IsNull(), ctx.memory);
+}
+
 TypedValue ValueType(const TypedValue *args, int64_t nargs, const FunctionContext &ctx) {
   FType<Or<Null, Bool, Integer, Double, String, List, Map, Vertex, Edge, Path>>("type", args, nargs);
   // The type names returned should be standardized openCypher type names.
@@ -1332,6 +1336,7 @@ std::function<TypedValue(const TypedValue *, int64_t, const FunctionContext &ctx
   if (function_name == "TOINTEGER") return ToInteger;
   if (function_name == "TYPE") return Type;
   if (function_name == "VALUETYPE") return ValueType;
+  if (function_name == "EXISTS") return ExistsFunction;
 
   // List, map functions
   if (function_name == "KEYS") return Keys;
